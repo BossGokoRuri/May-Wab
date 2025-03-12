@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Developer Portfolio</title>
+    <style>
+        /* ======= 基础重置 ======= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ======= CSS变量 ======= */
+        :root {
+            /* 颜色系统 */
+            --color-primary: #ffffff;
+            --color-bg: #0a0a0a;
+            --color-accent: #4dff4d;
+            --color-secondary: #666;
+            
+            /* 排版系统 */
+            --font-base: 16px;
+            --font-family: 'IBM Plex Mono', monospace;
+            --line-height: 1.6;
+            
+            /* 间距系统 */
+            --space-unit: 20px;
+            --space-sm: calc(var(--space-unit) * 0.5);
+            --space-md: var(--space-unit);
+            --space-lg: calc(var(--space-unit) * 2);
+            
+            /* 动效参数 */
+            --easing: cubic-bezier(0.23, 1, 0.32, 1);
+            --transition: all 0.3s var(--easing);
+        }
+
+        /* ======= 高对比度主题 ======= */
+        [data-theme="high-contrast"] {
+            --color-primary: #000;
+            --color-bg: #fff;
+            --color-accent: #f00;
+            --color-secondary: #444;
+        }
+
+        /* ======= 基础样式 ======= */
+        body {
+            background: var(--color-bg);
+            color: var(--color-primary);
+            font-family: var(--font-family);
+            font-size: var(--font-base);
+            line-height: var(--line-height);
+            overflow-x: hidden;
+        }
+
+        /* ======= 导航栏 ======= */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: var(--space-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-lg);
+        }
+
+        .nav-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            position: relative;
+            padding: var(--space-sm) 0;
+            transition: var(--transition);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* ======= 主内容区 ======= */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        /* ======= 内容区块 ======= */
+        .section {
+            padding: var(--space-lg) 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s var(--easing);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ======= 项目网格 ======= */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-md);
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            border: 1px solid var(--color-secondary);
+            padding: var(--space-md);
+            transition: var(--transition);
+        }
+
+        .project-card:hover {
+            border-color: var(--color-accent);
+            transform: translateY(-5px);
+        }
+
+        /* ======= 响应式设计 ======= */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; /* 移动端隐藏导航 */
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航 -->
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+        <button id="themeToggle">Toggle Contrast</button>
+    </nav>
+
+    <!-- 主内容 -->
+    <main>
+        <section class="hero">
+            <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+            <h1>
+                <span>Creative</span><br>
+                <span>Developer</span>
+            </h1>
+        </section>
+
+        <section id="about" class="section">
+            <div class="content">
+                <h2>About</h2>
+                <p>I collaborate with agencies and designers...</p>
+            </div>
+        </section>
+
+        <section id="work" class="section">
+            <div class="project-grid" id="projectGrid"></div>
+        </section>
+    </main>
+
+    <script>
+        // === 矩阵背景动画 ===
+        class MatrixBackground {
+            constructor(canvas) {
+                this.canvas = canvas
+                this.ctx = canvas.getContext('2d')
+                this.drops = []
+                this.interval = 50
+                this.init()
+            }
+
+            init() {
+                this.resizeCanvas()
+                window.addEventListener('resize', () => this.resizeCanvas())
+                this.createDrops()
+                this.animate()
+            }
+
+            resizeCanvas() {
+                const dpr = window.devicePixelRatio || 1
+                this.canvas.width = window.innerWidth * dpr
+                this.canvas.height = window.innerHeight * dpr
+                this.ctx.scale(dpr, dpr)
+            }
+
+            createDrops() {
+                const cols = Math.floor(this.canvas.width / 20)
+                this.drops = Array(cols).fill().map(() => Math.random() * this.canvas.height)
+            }
+
+            draw() {
+                this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)'
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+                
+                this.ctx.fillStyle = getComputedStyle(document.documentElement)
+                    .getPropertyValue('--color-accent')
+                this.ctx.font = '15px monospace'
+
+                this.drops.forEach((y, i) => {
+                    const x = i * 20
+                    const char = Math.random() > 0.5 ? '0' : '1'
+                    this.ctx.fillText(char, x, y)
+                    
+                    if (y > this.canvas.height && Math.random() > 0.975) {
+                        this.drops[i] = 0
+                    } else {
+                        this.drops[i] += 2
+                    }
+                })
+            }
+
+            animate() {
+                this.draw()
+                setTimeout(() => requestAnimationFrame(() => this.animate()), this.interval)
+            }
+        }
+
+        // === 主题管理 ===
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle')
+                this.currentTheme = localStorage.getItem('theme') || 'dark'
+                this.init()
+            }
+
+            init() {
+                document.documentElement.setAttribute('data-theme', this.currentTheme)
+                this.themeToggle.addEventListener('click', () => this.toggleTheme())
+            }
+
+            toggleTheme() {
+                this.currentTheme = this.currentTheme === 'dark' ? 'high-contrast' : 'dark'
+                document.documentElement.setAttribute('data-theme', this.currentTheme)
+                localStorage.setItem('theme', this.currentTheme)
+            }
+        }
+
+        // === 动态加载项目 ===
+        const projects = [
+            { title: 'Nod Coding Bootcamp', id: 'cgn5-0000/33' },
+            { title: 'Generous Branding', id: '3nsc-0001/33' },
+            // 添加更多项目...
+        ]
+
+        function loadProjects() {
+            const grid = document.getElementById('projectGrid')
+            projects.forEach(project => {
+                const card = document.createElement('div')
+                card.className = 'project-card'
+                card.innerHTML = `
+                    <h3>${project.title}</h3>
+                    <span>${project.id}</span>
+                `
+                grid.appendChild(card)
+            })
+        }
+
+        // === 初始化 ===
+        document.addEventListener('DOMContentLoaded', () => {
+            // 启动背景动画
+            new MatrixBackground(document.getElementById('matrixCanvas'))
+            
+            // 初始化主题
+            new ThemeManager()
+
+            // 加载项目
+            loadProjects()
+
+            // 滚动动画
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible')
+                    }
+                })
+            }, { threshold: 0.1 })
+
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section)
+            })
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault()
+                    document.querySelector(this.getAttribute('href'))
+                        .scrollIntoView({ behavior: 'smooth' })
+                })
+            })
+        })
+    </script>
+</body>
+</html>
