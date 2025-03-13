@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        :root {
+            --color-primary: #ffffff;
+            --color-bg: #0a0a0a;
+            --color-accent: #4dff4d;
+            --color-secondary: #666;
+            --nav-bg: rgba(10, 10, 10, 0.95);
+            --section-width: 1200px;
+            --hero-scale: 1.1;
+        }
+
+        [data-theme="high-contrast"] {
+            --color-primary: #000000;
+            --color-bg: #ffffff;
+            --color-accent: #000000;
+            --color-secondary: #444;
+            --nav-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body {
+            background: var(--color-bg);
+            color: var(--color-primary);
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+            border-bottom: 2px solid var(--color-secondary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            position: relative;
+            padding: 10px 0;
+            transition: all 0.4s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--color-accent);
+            transition: width 0.4s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 8rem);
+            line-height: 1.2;
+            text-align: center;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .hero h1 span {
+            display: inline-block;
+            padding: 20px;
+            transition: inherit;
+        }
+
+        .hero h1:hover span {
+            transform: scale(var(--hero-scale));
+            text-shadow: 0 0 20px var(--color-accent);
+        }
+
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 50px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-container {
+            width: 100%;
+            max-width: var(--section-width);
+            margin: 0 auto;
+            display: flex;
+            gap: 50px;
+            position: relative;
+        }
+
+        .profile-side {
+            flex: 0 0 350px;
+            position: sticky;
+            top: 150px;
+            height: fit-content;
+            text-align: center;
+            align-self: flex-start;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 450px;
+            border-radius: 15px;
+            object-fit: cover;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .profile-image:hover {
+            transform: scale(1.03);
+        }
+
+        .content-side {
+            flex: 1;
+            position: relative;
+            min-height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .matrix-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+
+        .code-matrix {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.3;
+        }
+
+        .panel-wrapper {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            perspective: 1200px;
+            transition: transform 0.3s ease;
+        }
+
+        .panel-wrapper:hover {
+            transform: scale(1.02);
+            z-index: 2;
+        }
+
+        .panel {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            background: var(--nav-bg);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--color-secondary);
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            backface-visibility: hidden;
+        }
+
+        .panel-front {
+            transform: rotateY(0deg);
+            z-index: 2;
+        }
+
+        .panel-back {
+            transform: rotateY(180deg);
+            z-index: 1;
+        }
+
+        .panel-wrapper.flipped .panel-front {
+            transform: rotateY(-180deg);
+        }
+
+        .panel-wrapper.flipped .panel-back {
+            transform: rotateY(0deg);
+        }
+
+        .toggle-btn {
+            position: absolute;
+            bottom: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--color-accent);
+            color: var(--color-bg);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            z-index: 3;
+        }
+
+        .toggle-btn:hover {
+            transform: translateX(-50%) scale(1.1);
+            box-shadow: 0 0 25px var(--color-accent);
+        }
+
+        .theme-toggle {
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--color-accent);
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-icon {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            fill: currentColor;
+        }
+
+        .moon-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) rotate(0deg);
+            fill: #ffffff;
+        }
+
+        .sun-icon {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(90deg);
+        }
+
+        [data-theme="high-contrast"] .moon-icon {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(-90deg);
+            fill: #000000;
+        }
+
+        [data-theme="high-contrast"] .sun-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) rotate(0deg);
+        }
+
+        .tech-item {
+            display: inline-block;
+            margin: 15px;
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: scale(1.05);
+            background: var(--color-accent);
+            color: var(--color-bg);
+        }
+		
+		.profile-side {
+		            top: 180px;
+		            margin-top: 30px;
+		        }
+		
+		.profile-image {
+			margin-top: 20px;
+		}
+
+		.content-side {
+			padding-bottom: 100px;
+		}
+
+		.toggle-btn {
+			bottom: -50px;
+			padding: 12px 25px;
+		}
+		
+		 .contact-grid {
+					display: grid;
+					grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+					gap: 30px;
+					width: 100%;
+					padding: 40px 0;
+		}
+
+		.contact-card {
+			background: var(--nav-bg);
+			border-radius: 15px;
+			padding: 30px;
+			text-align: center;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border: 1px solid var(--color-secondary);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.contact-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+		}
+
+		.contact-icon {
+			width: 60px;
+			height: 60px;
+			margin: 0 auto 20px;
+			fill: currentColor;
+		}
+
+		.contact-text {
+			font-size: 1.1rem;
+			margin: 10px 0;
+		}
+
+		.copy-notice {
+			position: fixed;
+			top: 20px;
+			left: 50%;
+			transform: translateX(-50%);
+			background: var(--color-accent);
+			color: var(--color-bg);
+			padding: 12px 25px;
+			border-radius: 25px;
+			font-size: 0.9rem;
+			opacity: 0;
+			visibility: hidden;
+			transition: all 0.3s ease;
+			z-index: 1000;
+		}
+
+		.copy-notice.show {
+			opacity: 1;
+			visibility: visible;
+		}
+		
+		.copy-notice {
+		            position: fixed;
+		            top: 100px; /* 下移显示位置 */
+		            left: 50%;
+		            transform: translateX(-50%);
+		            background: var(--color-accent);
+		            color: var(--color-bg);
+		            padding: 15px 35px;
+		            border-radius: 30px;
+		            font-size: 1rem;
+		            opacity: 0;
+		            visibility: hidden;
+		            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+		            z-index: 9999;
+		            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+		            display: flex;
+		            align-items: center;
+		            gap: 10px;
+		        }
+		
+		        .copy-notice::before {
+		            content: '✓';
+		            font-size: 1.2rem;
+		            font-weight: bold;
+		        }
+		
+		        .copy-notice.show {
+		            opacity: 1;
+		            visibility: visible;
+		            top: 120px; /* 显示时的最终位置 */
+		        }
+		
+		        /* 优化联系卡片点击效果 */
+		        .contact-card:active {
+		            transform: scale(0.98);
+		        }
+
+		@media (max-width: 768px) {
+			.contact-grid {
+				grid-template-columns: 1fr;
+				max-width: 400px;
+				margin: 0 auto;
+			}
+		}
+
+		@media (max-width: 1200px) {
+			.profile-side {
+				top: 120px;
+				margin-top: 20px;
+			}
+			
+			.toggle-btn {
+				bottom: -40px;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.profile-side {
+				top: 100px;
+				margin-top: 15px;
+			}
+			
+			.toggle-btn {
+				bottom: -30px;
+				padding: 10px 20px;
+			}
+		}
+
+        @media (max-width: 1200px) {
+            .section-container {
+                flex-direction: column;
+                padding: 0 30px;
+            }
+
+            .profile-side {
+                position: static;
+                max-width: 500px;
+                margin: 0 auto;
+            }
+
+            .profile-image {
+                height: auto;
+            }
+
+            .toggle-btn {
+                bottom: -60px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .section {
+                padding: 100px 20px;
+            }
+
+            .panel {
+                padding: 25px;
+            }
+
+            .theme-toggle {
+                width: 50px;
+                height: 50px;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.5rem, 12vw, 4rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-links">
+            <a href="#home" class="nav-link">Home</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#work" class="nav-link">Work</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+        <button id="themeToggle" class="theme-toggle">
+            <svg class="theme-icon moon-icon" viewBox="0 0 24 24">
+                <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1-8.313-12.454z"/>
+            </svg>
+            <svg class="theme-icon sun-icon" viewBox="0 0 24 24">
+                <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/>
+            </svg>
+        </button>
+    </nav>
+
+    <main>
+        <section id="home" class="hero">
+            <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+            <h1>
+                <span>五月-雷</span><br>
+                <span>1228</span>
+            </h1>
+        </section>
+
+        <section id="about" class="section">
+            <div class="section-container">
+                <div class="profile-side">
+                    <img src="https://pic1.imgdb.cn/item/67d2c77c88c538a9b5bc82e1.png" alt="Profile" class="profile-image">
+                    <h2>五月</h2>
+                    <p>前端工程师</p>
+                    <p>嵌入式工程师</p>
+                    <p>全栈开发工程师</p>
+                </div>
+                
+                <div class="content-side">
+                    <div class="matrix-container">
+                        <canvas class="code-matrix" id="aboutMatrix"></canvas>
+                    </div>
+                    <div class="panel-wrapper">
+                        <div class="panel panel-front">
+                            <h3>技能及证书</h3>
+                            <div class="tech-item">JavaScript</div>
+                            <div class="tech-item">HTML</div>
+                            <div class="tech-item">C/C++</div>
+							<div class="tech-item">Python</div>
+							<div class="tech-item">Java</div>
+							<div class="tech-item">数据库</div>
+							<div class="tech-item">嵌入式</div>
+							<div class="tech-item">FPGA</div>
+							<div class="tech-item">PS</div>
+							<div class="tech-item">PR</div>
+							<div class="tech-item">AI</div>
+							<div class="tech-item">各种办公套件</div>						
+                        </div>
+                        <div class="panel panel-back">
+                            <h3>爱好</h3>
+                            <div class="tech-item">游戏</div>
+                            <div class="tech-item">钓鱼</div>
+                            <div class="tech-item">徒步</div>
+                        </div>
+                    </div>
+                    <button class="toggle-btn">Toggle View</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="work" class="section">
+            <div class="section-container">
+                <h2>Work Projects</h2>
+            </div>
+        </section>
+
+         <section id="contact" class="section">
+                <div class="section-container">
+                    <h2>Contact Me</h2>
+                    <div class="contact-grid">
+                        <div class="contact-card" data-copy="example@email.com">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+                            </svg>
+                            <div class="contact-text">example@email.com</div>
+                        </div>
+                        
+                        <div class="contact-card" data-copy="+86 138-1234-5678">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            <div class="contact-text">+86 138-1234-5678</div>
+                        </div>
+        
+                        <div class="contact-card" data-copy="https://github.com/username">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                            <div class="contact-text">GitHub</div>
+                        </div>
+        
+                        <div class="contact-card" data-copy="微信ID：wechat123">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M15.5 2h-8C4.47 2 2 4.47 2 7.5v9C2 19.53 4.47 22 7.5 22h9c3.03 0 5.5-2.47 5.5-5.5v-8C22 4.47 19.53 2 16.5 2zm-8 1h8c2.69 0 4.5 1.81 4.5 4.5v8c0 2.69-1.81 4.5-4.5 4.5h-8C4.81 20 3 18.19 3 15.5v-8C3 4.81 4.81 3 7.5 3zm4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                            </svg>
+                            <div class="contact-text">微信</div>
+                        </div>
+                    </div>
+                    <div class="copy-notice">已复制到剪贴板</div>
+                </div>
+            </section>
+    </main>
+
+    <script>
+
+            class MatrixBackground {
+                constructor(canvas) {
+                    this.canvas = canvas;
+                    this.ctx = canvas.getContext('2d');
+                    this.drops = [];
+                    this.interval = 50;
+                    this.init();
+                }
+    
+                init() {
+                    this.resizeCanvas();
+                    window.addEventListener('resize', () => this.resizeCanvas());
+                    this.createDrops();
+                    this.animate();
+                }
+    
+                resizeCanvas() {
+                    const dpr = window.devicePixelRatio || 1;
+                    this.canvas.width = this.canvas.offsetWidth * dpr;
+                    this.canvas.height = this.canvas.offsetHeight * dpr;
+                    this.ctx.scale(dpr, dpr);
+                }
+    
+                createDrops() {
+                    const cols = Math.floor(this.canvas.width / 20);
+                    this.drops = Array(cols).fill().map(() => Math.random() * this.canvas.height);
+                }
+    
+                draw() {
+                    this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+                    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    this.ctx.fillStyle = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--color-accent');
+                    this.ctx.font = '18px monospace';
+    
+                    this.drops.forEach((y, i) => {
+                        const x = i * 20;
+                        const char = Math.random() > 0.5 ? '0' : '1';
+                        this.ctx.fillText(char, x, y);
+                        
+                        if (y > this.canvas.height) {
+                            this.drops[i] = 0;
+                        } else {
+                            this.drops[i] += 2;
+                        }
+                    });
+                }
+    
+                animate() {
+                    this.draw();
+                    setTimeout(() => requestAnimationFrame(() => this.animate()), this.interval);
+                }
+            }
+    
+            class ThemeManager {
+                constructor() {
+                    this.themeToggle = document.getElementById('themeToggle');
+                    this.currentTheme = localStorage.getItem('theme') || 'dark';
+                    this.init();
+                }
+    
+                init() {
+                    document.documentElement.setAttribute('data-theme', this.currentTheme);
+                    this.themeToggle.addEventListener('click', () => this.toggleTheme());
+                }
+    
+                toggleTheme() {
+                    this.currentTheme = this.currentTheme === 'dark' ? 'high-contrast' : 'dark';
+                    document.documentElement.setAttribute('data-theme', this.currentTheme);
+                    localStorage.setItem('theme', this.currentTheme);
+                }
+            }
+    
+            class ScrollManager {
+                constructor() {
+                    this.sections = document.querySelectorAll('section');
+                    this.navLinks = document.querySelectorAll('.nav-link');
+                    this.init();
+                }
+    
+                init() {
+                    window.addEventListener('scroll', () => this.handleScroll());
+                    this.navLinks.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            this.scrollToSection(link.hash);
+                        });
+                    });
+                }
+    
+                handleScroll() {
+                    this.sections.forEach(section => {
+                        const rect = section.getBoundingClientRect();
+                        if (rect.top < window.innerHeight/2 && rect.bottom > window.innerHeight/2) {
+                            section.classList.add('visible');
+                        }
+                    });
+                }
+    
+                scrollToSection(id) {
+                    const target = document.querySelector(id);
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }
+			
+			
+			function copyToClipboard(text) {
+			            navigator.clipboard.writeText(text).then(() => {
+			                const notice = document.querySelector('.copy-notice');
+			                notice.classList.add('show');
+			                setTimeout(() => notice.classList.remove('show'), 2000);
+			            });
+			        }
+					
+			function copyToClipboard(text) {
+						const success = () => {
+							const notice = document.querySelector('.copy-notice');
+							notice.textContent = `已复制: ${text}`;
+							notice.classList.add('show');
+							setTimeout(() => {
+								notice.classList.remove('show');
+								notice.textContent = '已复制到剪贴板'; // 恢复默认文本
+							}, 2000);
+						};
+			
+				const fail = () => {
+					const notice = document.querySelector('.copy-notice');
+					notice.textContent = '复制失败，请手动复制';
+					notice.style.background = '#ff4444';
+					notice.classList.add('show');
+					setTimeout(() => {
+						notice.classList.remove('show');
+						notice.style.background = var(--color-accent);
+					}, 2000);
+				};
+	
+				navigator.clipboard.writeText(text).then(success).catch(fail);
+			}
+	
+			// 增强点击反馈
+			document.querySelectorAll('.contact-card').forEach(card => {
+				card.addEventListener('click', function() {
+					this.style.transform = 'scale(0.98)';
+					setTimeout(() => {
+						this.style.transform = '';
+					}, 100);
+					copyToClipboard(this.dataset.copy);
+				});
+			});
+			
+			document.querySelectorAll('.contact-card').forEach(card => {
+						card.addEventListener('click', () => {
+							const copyText = card.dataset.copy;
+							copyToClipboard(copyText);
+						});
+					});
+	
+
+            document.addEventListener('DOMContentLoaded', () => {
+                new MatrixBackground(document.getElementById('matrixCanvas'));
+                new MatrixBackground(document.getElementById('aboutMatrix'));
+                new ThemeManager();
+                new ScrollManager();
+                document.querySelector('.toggle-btn').addEventListener('click', () => {
+                    document.querySelector('.panel-wrapper').classList.toggle('flipped');
+                });
+    
+                document.querySelectorAll('.tech-item').forEach(item => {
+                    item.addEventListener('mouseenter', () => {
+                        item.style.transform = 'scale(1.05)';
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        item.style.transform = 'scale(1)';
+                    });
+                });
+            });
+        </script>
+    </body>
+    </html>
