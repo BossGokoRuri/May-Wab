@@ -405,12 +405,10 @@
 		            top: 120px;
 		        }
 		
-		        /* 修复冲突的CSS定义 */
 		        .contact-card:active {
 		            transform: scale(0.98);
 		        }
 		
-		        /* 优化联系卡片点击效果 */
 		        .contact-card:active {
 		            transform: scale(0.98);
 		        }
@@ -519,7 +517,6 @@
 		            }
 		        }
 		
-		        /* 其他原有样式保持不变 */
 		        * {
 		            margin: 0;
 		            padding: 0;
@@ -821,7 +818,6 @@
 			            navigator.clipboard.writeText(text).then(success).catch(fail);
 			        }
 			
-			        // 修复事件监听器
 			        document.querySelectorAll('.contact-card').forEach(card => {
 			            card.addEventListener('click', function() {
 			                this.style.transform = 'scale(0.98)';
@@ -832,7 +828,6 @@
 			            });
 			        });
 	
-			// 增强点击反馈
 			document.querySelectorAll('.contact-card').forEach(card => {
 				card.addEventListener('click', function() {
 					this.style.transform = 'scale(0.98)';
