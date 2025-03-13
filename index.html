@@ -21,86 +21,88 @@
             --color-bg: #0a0a0a;
             --color-accent: #4dff4d;
             --color-secondary: #666;
+            --nav-bg: rgba(10, 10, 10, 0.95);
             
-            /* 排版系统 */
-            --font-base: 16px;
-            --font-family: 'IBM Plex Mono', monospace;
-            --line-height: 1.6;
+            /* 标题栏参数 */
+            --nav-link-scale: 1.2;
+            --nav-transition-duration: 0.4s;
             
-            /* 间距系统 */
-            --space-unit: 20px;
-            --space-sm: calc(var(--space-unit) * 0.5);
-            --space-md: var(--space-unit);
-            --space-lg: calc(var(--space-unit) * 2);
-            
-            /* 动效参数 */
-            --easing: cubic-bezier(0.23, 1, 0.32, 1);
-            --transition: all 0.3s var(--easing);
+            /* 主标题参数 */
+            --hero-scale: 1.1;
+            --hero-transition-duration: 0.5s;
         }
 
-        /* ======= 高对比度主题 ======= */
+        /* ======= 增强高对比度主题 ======= */
         [data-theme="high-contrast"] {
-            --color-primary: #000;
-            --color-bg: #fff;
-            --color-accent: #f00;
+            --color-primary: #000000;
+            --color-bg: #ffffff;
+            --color-accent: #000000;
             --color-secondary: #444;
+            --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
         /* ======= 基础样式 ======= */
         body {
             background: var(--color-bg);
             color: var(--color-primary);
-            font-family: var(--font-family);
-            font-size: var(--font-base);
-            line-height: var(--line-height);
+            font-family: 'Arial', sans-serif;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* ======= 导航栏 ======= */
+        /* ======= 增强版导航栏 ======= */
         .nav {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: var(--space-md);
+            padding: 30px 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
+            background: var(--nav-bg);
+            backdrop-filter: blur(15px);
             z-index: 1000;
+            border-bottom: 2px solid var(--color-secondary);
         }
 
         .nav-links {
             display: flex;
-            gap: var(--space-lg);
+            gap: 40px;
         }
 
         .nav-link {
             color: var(--color-primary);
             text-decoration: none;
+            font-size: 1.2rem;
             position: relative;
-            padding: var(--space-sm) 0;
-            transition: var(--transition);
+            padding: 10px 0;
+            transition: all var(--nav-transition-duration) ease-in-out;
         }
 
+        /* 下划线动画 */
         .nav-link::after {
             content: '';
             position: absolute;
             bottom: 0;
             left: 0;
             width: 0;
-            height: 2px;
+            height: 3px;
             background: var(--color-accent);
-            transition: var(--transition);
+            transition: width var(--nav-transition-duration) ease-in-out;
+        }
+
+        .nav-link:hover {
+            transform: scale(var(--nav-link-scale));
         }
 
         .nav-link:hover::after {
             width: 100%;
         }
 
-        /* ======= 主内容区 ======= */
+        /* ======= 主标题区增强 ======= */
         .hero {
             height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -108,6 +110,34 @@
             overflow: hidden;
         }
 
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 20px;
+            max-width: 90%;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 8rem);
+            line-height: 1.2;
+            margin: 0;
+            transition: transform var(--hero-transition-duration) ease-in-out;
+        }
+
+        .hero h1 span {
+            display: inline-block;
+            padding: 20px;
+            transition: inherit;
+        }
+
+        /* 悬停放大效果 */
+        .hero h1:hover span {
+            transform: scale(var(--hero-scale));
+            text-shadow: 0 0 20px var(--color-accent);
+        }
+
+        /* ======= 矩阵背景恢复 ======= */
         .matrix-bg {
             position: absolute;
             top: 0;
@@ -120,13 +150,15 @@
 
         /* ======= 内容区块 ======= */
         .section {
-            padding: var(--space-lg) 0;
-            min-height: 100vh;
+            height: 100vh;
+            width: 100%;
             display: flex;
             align-items: center;
+            justify-content: center;
+            padding: 50px;
             opacity: 0;
             transform: translateY(50px);
-            transition: all 0.8s var(--easing);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .section.visible {
@@ -134,35 +166,38 @@
             transform: translateY(0);
         }
 
-        /* ======= 项目网格 ======= */
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-md);
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
+        /* ======= 主题切换按钮 ======= */
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--color-accent);
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .project-card {
-            border: 1px solid var(--color-secondary);
-            padding: var(--space-md);
-            transition: var(--transition);
-        }
-
-        .project-card:hover {
-            border-color: var(--color-accent);
-            transform: translateY(-5px);
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--color-accent);
         }
 
         /* ======= 响应式设计 ======= */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none; /* 移动端隐藏导航 */
+            .nav {
+                padding: 20px;
             }
 
-            .project-grid {
-                grid-template-columns: 1fr;
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: clamp(2.5rem, 12vw, 4rem);
+            }
+
+            .section {
+                padding: 20px;
             }
         }
     </style>
@@ -171,165 +206,183 @@
     <!-- 导航 -->
     <nav class="nav">
         <div class="nav-links">
+            <a href="#home" class="nav-link">Home</a>
             <a href="#about" class="nav-link">About</a>
             <a href="#work" class="nav-link">Work</a>
             <a href="#contact" class="nav-link">Contact</a>
         </div>
-        <button id="themeToggle">Toggle Contrast</button>
+        <button id="themeToggle" class="theme-toggle" aria-label="切换主题"></button>
     </nav>
 
     <!-- 主内容 -->
     <main>
-        <section class="hero">
+        <section id="home" class="hero">
             <canvas class="matrix-bg" id="matrixCanvas"></canvas>
-            <h1>
-                <span>Creative</span><br>
-                <span>Developer</span>
-            </h1>
+            <div class="hero-content">
+                <h1>
+                    <span>Creative</span><br>
+                    <span>Developer</span>
+                </h1>
+            </div>
         </section>
 
         <section id="about" class="section">
             <div class="content">
-                <h2>About</h2>
-                <p>I collaborate with agencies and designers...</p>
+                <h2>About Me</h2>
+                <p>Experienced developer specializing in creative solutions...</p>
             </div>
         </section>
 
         <section id="work" class="section">
-            <div class="project-grid" id="projectGrid"></div>
+            <div class="content">
+                <h2>My Work</h2>
+                <div class="project-grid"></div>
+            </div>
+        </section>
+
+        <section id="contact" class="section">
+            <div class="content">
+                <h2>Contact</h2>
+                <p>Get in touch: contact@example.com</p>
+            </div>
         </section>
     </main>
 
     <script>
-        // === 矩阵背景动画 ===
+        // === 矩阵背景初始化 ===
         class MatrixBackground {
             constructor(canvas) {
-                this.canvas = canvas
-                this.ctx = canvas.getContext('2d')
-                this.drops = []
-                this.interval = 50
-                this.init()
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.drops = [];
+                this.interval = 50;
+                this.init();
             }
 
             init() {
-                this.resizeCanvas()
-                window.addEventListener('resize', () => this.resizeCanvas())
-                this.createDrops()
-                this.animate()
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+                this.createDrops();
+                this.animate();
             }
 
             resizeCanvas() {
-                const dpr = window.devicePixelRatio || 1
-                this.canvas.width = window.innerWidth * dpr
-                this.canvas.height = window.innerHeight * dpr
-                this.ctx.scale(dpr, dpr)
+                const dpr = window.devicePixelRatio || 1;
+                this.canvas.width = window.innerWidth * dpr;
+                this.canvas.height = window.innerHeight * dpr;
+                this.ctx.scale(dpr, dpr);
             }
 
             createDrops() {
-                const cols = Math.floor(this.canvas.width / 20)
-                this.drops = Array(cols).fill().map(() => Math.random() * this.canvas.height)
+                const cols = Math.floor(this.canvas.width / 20);
+                this.drops = Array(cols).fill().map(() => Math.random() * this.canvas.height);
             }
 
             draw() {
-                this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)'
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+                this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
                 
                 this.ctx.fillStyle = getComputedStyle(document.documentElement)
-                    .getPropertyValue('--color-accent')
-                this.ctx.font = '15px monospace'
+                    .getPropertyValue('--color-accent');
+                this.ctx.font = '18px monospace';
 
                 this.drops.forEach((y, i) => {
-                    const x = i * 20
-                    const char = Math.random() > 0.5 ? '0' : '1'
-                    this.ctx.fillText(char, x, y)
+                    const x = i * 20;
+                    const char = Math.random() > 0.5 ? '0' : '1';
+                    this.ctx.fillText(char, x, y);
                     
-                    if (y > this.canvas.height && Math.random() > 0.975) {
-                        this.drops[i] = 0
+                    if (y > this.canvas.height) {
+                        this.drops[i] = 0;
                     } else {
-                        this.drops[i] += 2
+                        this.drops[i] += 2;
                     }
-                })
+                });
             }
 
             animate() {
-                this.draw()
-                setTimeout(() => requestAnimationFrame(() => this.animate()), this.interval)
+                this.draw();
+                setTimeout(() => requestAnimationFrame(() => this.animate()), this.interval);
+            }
+        }
+
+        // === 增强滚动交互 ===
+        class ScrollManager {
+            constructor() {
+                this.sections = document.querySelectorAll('section');
+                this.navLinks = document.querySelectorAll('.nav-link');
+                this.init();
+            }
+
+            init() {
+                // 滚动检测
+                window.addEventListener('scroll', () => this.handleScroll());
+                // 点击导航
+                this.navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.scrollToSection(link.hash);
+                    });
+                });
+                // 初始化检测
+                this.handleScroll();
+            }
+
+            handleScroll() {
+                const scrollPosition = window.scrollY + window.innerHeight / 2;
+                
+                this.sections.forEach(section => {
+                    const top = section.offsetTop;
+                    const bottom = top + section.offsetHeight;
+                    
+                    if (scrollPosition >= top && scrollPosition <= bottom) {
+                        this.navLinks.forEach(link => {
+                            link.classList.toggle('active', link.hash === `#${section.id}`);
+                        });
+                        
+                        if (!section.classList.contains('visible')) {
+                            section.classList.add('visible');
+                        }
+                    }
+                });
+            }
+
+            scrollToSection(id) {
+                const target = document.querySelector(id);
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
             }
         }
 
         // === 主题管理 ===
         class ThemeManager {
             constructor() {
-                this.themeToggle = document.getElementById('themeToggle')
-                this.currentTheme = localStorage.getItem('theme') || 'dark'
-                this.init()
+                this.themeToggle = document.getElementById('themeToggle');
+                this.currentTheme = localStorage.getItem('theme') || 'dark';
+                this.init();
             }
 
             init() {
-                document.documentElement.setAttribute('data-theme', this.currentTheme)
-                this.themeToggle.addEventListener('click', () => this.toggleTheme())
+                document.documentElement.setAttribute('data-theme', this.currentTheme);
+                this.themeToggle.addEventListener('click', () => this.toggleTheme());
             }
 
             toggleTheme() {
-                this.currentTheme = this.currentTheme === 'dark' ? 'high-contrast' : 'dark'
-                document.documentElement.setAttribute('data-theme', this.currentTheme)
-                localStorage.setItem('theme', this.currentTheme)
+                this.currentTheme = this.currentTheme === 'dark' ? 'high-contrast' : 'dark';
+                document.documentElement.setAttribute('data-theme', this.currentTheme);
+                localStorage.setItem('theme', this.currentTheme);
             }
-        }
-
-        // === 动态加载项目 ===
-        const projects = [
-            { title: 'Nod Coding Bootcamp', id: 'cgn5-0000/33' },
-            { title: 'Generous Branding', id: '3nsc-0001/33' },
-            // 添加更多项目...
-        ]
-
-        function loadProjects() {
-            const grid = document.getElementById('projectGrid')
-            projects.forEach(project => {
-                const card = document.createElement('div')
-                card.className = 'project-card'
-                card.innerHTML = `
-                    <h3>${project.title}</h3>
-                    <span>${project.id}</span>
-                `
-                grid.appendChild(card)
-            })
         }
 
         // === 初始化 ===
         document.addEventListener('DOMContentLoaded', () => {
-            // 启动背景动画
-            new MatrixBackground(document.getElementById('matrixCanvas'))
-            
-            // 初始化主题
-            new ThemeManager()
-
-            // 加载项目
-            loadProjects()
-
-            // 滚动动画
-            const observer = new IntersectionObserver(entries => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible')
-                    }
-                })
-            }, { threshold: 0.1 })
-
-            document.querySelectorAll('.section').forEach(section => {
-                observer.observe(section)
-            })
-
-            // 平滑滚动
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function(e) {
-                    e.preventDefault()
-                    document.querySelector(this.getAttribute('href'))
-                        .scrollIntoView({ behavior: 'smooth' })
-                })
-            })
-        })
+            new MatrixBackground(document.getElementById('matrixCanvas'));
+            new ScrollManager();
+            new ThemeManager();
+        });
     </script>
 </body>
 </html>
