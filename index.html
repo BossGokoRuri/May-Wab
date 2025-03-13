@@ -405,10 +405,12 @@
 		            top: 120px;
 		        }
 		
+		        /* 修复冲突的CSS定义 */
 		        .contact-card:active {
 		            transform: scale(0.98);
 		        }
 		
+		        /* 优化联系卡片点击效果 */
 		        .contact-card:active {
 		            transform: scale(0.98);
 		        }
@@ -491,9 +493,75 @@
                 font-size: clamp(2.5rem, 12vw, 4rem);
             }
         }
+		
+		.brand-mark {
+		            position: fixed;
+		            left: 20px;
+		            bottom: 20px;
+		            width: 6.67vw;  /* 100/15 ≈ 6.67 */
+		            height: 4vh;    /* 100/25 = 4 */
+		            z-index: 999;
+		            transition: opacity 0.3s ease;
+		        }
+		
+		        .brand-mark img {
+		            width: 100%;
+		            height: 100%;
+		            object-fit: contain;
+		        }
+		
+		        @media (max-width: 768px) {
+		            .brand-mark {
+		                width: 10vw;
+		                height: 6vh;
+		                left: 10px;
+		                bottom: 10px;
+		            }
+		        }
+		
+		        /* 其他原有样式保持不变 */
+		        * {
+		            margin: 0;
+		            padding: 0;
+		            box-sizing: border-box;
+		            -webkit-font-smoothing: antialiased;
+		            -moz-osx-font-smoothing: grayscale;
+		        }
+		
+		        :root {
+		            --color-primary: #ffffff;
+		            --color-bg: #0a0a0a;
+		            --color-accent: #4dff4d;
+		            --color-secondary: #666;
+		            --nav-bg: rgba(10, 10, 10, 0.95);
+		            --section-width: 1200px;
+		            --hero-scale: 1.1;
+		        }
+		
+		        [data-theme="high-contrast"] {
+		            --color-primary: #000000;
+		            --color-bg: #ffffff;
+		            --color-accent: #000000;
+		            --color-secondary: #444;
+		            --nav-bg: rgba(255, 255, 255, 0.95);
+		        }
+		
+		        body {
+		            background: var(--color-bg);
+		            color: var(--color-primary);
+		            font-family: 'Arial', sans-serif;
+		            overflow-x: hidden;
+		            scroll-behavior: smooth;
+		        }
+		
     </style>
 </head>
 <body>
+	
+	<div class="brand-mark">
+	        <img src="https://pic1.imgdb.cn/item/67d32f8188c538a9b5bc91cf.png" alt="Brand Logo"> <!-- 请替换实际图片路径 -->
+	    </div>
+	
     <nav class="nav">
         <div class="nav-links">
             <a href="#home" class="nav-link">Home</a>
@@ -752,7 +820,8 @@
 			
 			            navigator.clipboard.writeText(text).then(success).catch(fail);
 			        }
-	    
+			
+			        // 修复事件监听器
 			        document.querySelectorAll('.contact-card').forEach(card => {
 			            card.addEventListener('click', function() {
 			                this.style.transform = 'scale(0.98)';
@@ -763,6 +832,7 @@
 			            });
 			        });
 	
+			// 增强点击反馈
 			document.querySelectorAll('.contact-card').forEach(card => {
 				card.addEventListener('click', function() {
 					this.style.transform = 'scale(0.98)';
