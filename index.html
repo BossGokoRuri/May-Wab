@@ -323,41 +323,128 @@
 		            margin-top: 30px;
 		        }
 		
-		        .profile-image {
-		            margin-top: 20px;
+		.profile-image {
+			margin-top: 20px;
+		}
+
+		.content-side {
+			padding-bottom: 100px;
+		}
+
+		.toggle-btn {
+			bottom: -50px;
+			padding: 12px 25px;
+		}
+		
+		 .contact-grid {
+					display: grid;
+					grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+					gap: 30px;
+					width: 100%;
+					padding: 40px 0;
+		}
+
+		.contact-card {
+			background: var(--nav-bg);
+			border-radius: 15px;
+			padding: 30px;
+			text-align: center;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			border: 1px solid var(--color-secondary);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.contact-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+		}
+
+		.contact-icon {
+			width: 60px;
+			height: 60px;
+			margin: 0 auto 20px;
+			fill: currentColor;
+		}
+
+		.contact-text {
+			font-size: 1.1rem;
+			margin: 10px 0;
+		}
+
+		.copy-notice {
+		            position: fixed;
+		            top: 100px;
+		            left: 50%;
+		            transform: translateX(-50%);
+		            background: var(--color-accent);
+		            color: var(--color-bg);
+		            padding: 15px 35px;
+		            border-radius: 30px;
+		            font-size: 1rem;
+		            opacity: 0;
+		            visibility: hidden;
+		            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+		            z-index: 9999;
+		            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+		            display: flex;
+		            align-items: center;
+		            gap: 10px;
 		        }
 		
-		        .content-side {
-		            padding-bottom: 100px;
+		        .copy-notice::before {
+		            content: '✓';
+		            font-size: 1.2rem;
+		            font-weight: bold;
 		        }
 		
-		        .toggle-btn {
-		            bottom: -50px;
-		            padding: 12px 25px;
+		        .copy-notice.show {
+		            opacity: 1;
+		            visibility: visible;
+		            top: 120px;
 		        }
 		
-		        @media (max-width: 1200px) {
-		            .profile-side {
-		                top: 120px;
-		                margin-top: 20px;
-		            }
-		            
-		            .toggle-btn {
-		                bottom: -40px;
-		            }
+		        /* 修复冲突的CSS定义 */
+		        .contact-card:active {
+		            transform: scale(0.98);
 		        }
 		
-		        @media (max-width: 768px) {
-		            .profile-side {
-		                top: 100px;
-		                margin-top: 15px;
-		            }
-		            
-		            .toggle-btn {
-		                bottom: -30px;
-		                padding: 10px 20px;
-		            }
+		        /* 优化联系卡片点击效果 */
+		        .contact-card:active {
+		            transform: scale(0.98);
 		        }
+
+		@media (max-width: 768px) {
+			.contact-grid {
+				grid-template-columns: 1fr;
+				max-width: 400px;
+				margin: 0 auto;
+			}
+		}
+
+		@media (max-width: 1200px) {
+			.profile-side {
+				top: 120px;
+				margin-top: 20px;
+			}
+			
+			.toggle-btn {
+				bottom: -40px;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.profile-side {
+				top: 100px;
+				margin-top: 15px;
+			}
+			
+			.toggle-btn {
+				bottom: -30px;
+				padding: 10px 20px;
+			}
+		}
 
         @media (max-width: 1200px) {
             .section-container {
@@ -483,143 +570,239 @@
             </div>
         </section>
 
-        <section id="contact" class="section">
-            <div class="section-container">
-                <h2>Contact Me</h2>
-            </div>
-        </section>
+         <section id="contact" class="section">
+                <div class="section-container">
+                    <h2>Contact Me</h2>
+                    <div class="contact-grid">
+                        <div class="contact-card" data-copy="example@email.com">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
+                            </svg>
+                            <div class="contact-text">example@email.com</div>
+                        </div>
+                        
+                        <div class="contact-card" data-copy="+86 138-1234-5678">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                            </svg>
+                            <div class="contact-text">+86 138-1234-5678</div>
+                        </div>
+        
+                        <div class="contact-card" data-copy="https://github.com/username">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                            <div class="contact-text">GitHub</div>
+                        </div>
+        
+                        <div class="contact-card" data-copy="微信ID：wechat123">
+                            <svg class="contact-icon" viewBox="0 0 24 24">
+                                <path d="M15.5 2h-8C4.47 2 2 4.47 2 7.5v9C2 19.53 4.47 22 7.5 22h9c3.03 0 5.5-2.47 5.5-5.5v-8C22 4.47 19.53 2 16.5 2zm-8 1h8c2.69 0 4.5 1.81 4.5 4.5v8c0 2.69-1.81 4.5-4.5 4.5h-8C4.81 20 3 18.19 3 15.5v-8C3 4.81 4.81 3 7.5 3zm4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm6 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-3 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                            </svg>
+                            <div class="contact-text">微信</div>
+                        </div>
+                    </div>
+                    <div class="copy-notice">已复制到剪贴板</div>
+                </div>
+            </section>
     </main>
 
     <script>
-	    class MatrixBackground {
-		constructor(canvas) {
-		    this.canvas = canvas;
-		    this.ctx = canvas.getContext('2d');
-		    this.drops = [];
-		    this.interval = 50;
-		    this.init();
-		}
-	
-		init() {
-		    this.resizeCanvas();
-		    window.addEventListener('resize', () => this.resizeCanvas());
-		    this.createDrops();
-		    this.animate();
-		}
-	
-		resizeCanvas() {
-		    const dpr = window.devicePixelRatio || 1;
-		    this.canvas.width = this.canvas.offsetWidth * dpr;
-		    this.canvas.height = this.canvas.offsetHeight * dpr;
-		    this.ctx.scale(dpr, dpr);
-		}
-	
-		createDrops() {
-		    const cols = Math.floor(this.canvas.width / 20);
-		    this.drops = Array(cols).fill().map(() => Math.random() * this.canvas.height);
-		}
-	
-		draw() {
-		    this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
-		    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-		    
-		    this.ctx.fillStyle = getComputedStyle(document.documentElement)
-			.getPropertyValue('--color-accent');
-		    this.ctx.font = '18px monospace';
-	
-		    this.drops.forEach((y, i) => {
-			const x = i * 20;
-			const char = Math.random() > 0.5 ? '0' : '1';
-			this.ctx.fillText(char, x, y);
+
+            class MatrixBackground {
+                constructor(canvas) {
+                    this.canvas = canvas;
+                    this.ctx = canvas.getContext('2d');
+                    this.drops = [];
+                    this.interval = 50;
+                    this.init();
+                }
+    
+                init() {
+                    this.resizeCanvas();
+                    window.addEventListener('resize', () => this.resizeCanvas());
+                    this.createDrops();
+                    this.animate();
+                }
+    
+                resizeCanvas() {
+                    const dpr = window.devicePixelRatio || 1;
+                    this.canvas.width = this.canvas.offsetWidth * dpr;
+                    this.canvas.height = this.canvas.offsetHeight * dpr;
+                    this.ctx.scale(dpr, dpr);
+                }
+    
+                createDrops() {
+                    const cols = Math.floor(this.canvas.width / 20);
+                    this.drops = Array(cols).fill().map(() => Math.random() * this.canvas.height);
+                }
+    
+                draw() {
+                    this.ctx.fillStyle = 'rgba(10, 10, 10, 0.05)';
+                    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                    
+                    this.ctx.fillStyle = getComputedStyle(document.documentElement)
+                        .getPropertyValue('--color-accent');
+                    this.ctx.font = '18px monospace';
+    
+                    this.drops.forEach((y, i) => {
+                        const x = i * 20;
+                        const char = Math.random() > 0.5 ? '0' : '1';
+                        this.ctx.fillText(char, x, y);
+                        
+                        if (y > this.canvas.height) {
+                            this.drops[i] = 0;
+                        } else {
+                            this.drops[i] += 2;
+                        }
+                    });
+                }
+    
+                animate() {
+                    this.draw();
+                    setTimeout(() => requestAnimationFrame(() => this.animate()), this.interval);
+                }
+            }
+    
+            class ThemeManager {
+                constructor() {
+                    this.themeToggle = document.getElementById('themeToggle');
+                    this.currentTheme = localStorage.getItem('theme') || 'dark';
+                    this.init();
+                }
+    
+                init() {
+                    document.documentElement.setAttribute('data-theme', this.currentTheme);
+                    this.themeToggle.addEventListener('click', () => this.toggleTheme());
+                }
+    
+                toggleTheme() {
+                    this.currentTheme = this.currentTheme === 'dark' ? 'high-contrast' : 'dark';
+                    document.documentElement.setAttribute('data-theme', this.currentTheme);
+                    localStorage.setItem('theme', this.currentTheme);
+                }
+            }
+    
+            class ScrollManager {
+                constructor() {
+                    this.sections = document.querySelectorAll('section');
+                    this.navLinks = document.querySelectorAll('.nav-link');
+                    this.init();
+                }
+    
+                init() {
+                    window.addEventListener('scroll', () => this.handleScroll());
+                    this.navLinks.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            this.scrollToSection(link.hash);
+                        });
+                    });
+                }
+    
+                handleScroll() {
+                    this.sections.forEach(section => {
+                        const rect = section.getBoundingClientRect();
+                        if (rect.top < window.innerHeight/2 && rect.bottom > window.innerHeight/2) {
+                            section.classList.add('visible');
+                        }
+                    });
+                }
+    
+                scrollToSection(id) {
+                    const target = document.querySelector(id);
+                    if (target) {
+                        window.scrollTo({
+                            top: target.offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            }
 			
-			if (y > this.canvas.height) {
-			    this.drops[i] = 0;
-			} else {
-			    this.drops[i] += 2;
-			}
-		    });
-		}
+			
+			function copyToClipboard(text) {
+			            navigator.clipboard.writeText(text).then(() => {
+			                const notice = document.querySelector('.copy-notice');
+			                notice.classList.add('show');
+			                setTimeout(() => notice.classList.remove('show'), 2000);
+			            });
+			        }
+					
+			function copyToClipboard(text) {
+			            const success = () => {
+			                const notice = document.querySelector('.copy-notice');
+			                notice.textContent = `已复制: ${text}`;
+			                notice.classList.add('show');
+			                setTimeout(() => {
+			                    notice.classList.remove('show');
+			                    notice.textContent = '已复制到剪贴板';
+			                }, 2000);
+			            };
+			
+			            const fail = () => {
+			                const notice = document.querySelector('.copy-notice');
+			                notice.textContent = '复制失败，请手动复制';
+			                notice.style.background = '#ff4444';
+			                notice.classList.add('show');
+			                setTimeout(() => {
+			                    notice.classList.remove('show');
+			                    notice.style.background = getComputedStyle(document.documentElement)
+			                        .getPropertyValue('--color-accent');
+			                }, 2000);
+			            };
+			
+			            navigator.clipboard.writeText(text).then(success).catch(fail);
+			        }
+			
+			        // 修复事件监听器
+			        document.querySelectorAll('.contact-card').forEach(card => {
+			            card.addEventListener('click', function() {
+			                this.style.transform = 'scale(0.98)';
+			                setTimeout(() => {
+			                    this.style.transform = '';
+			                }, 100);
+			                copyToClipboard(this.dataset.copy);
+			            });
+			        });
 	
-		animate() {
-		    this.draw();
-		    setTimeout(() => requestAnimationFrame(() => this.animate()), this.interval);
-		}
-	    }
-	
-	    class ThemeManager {
-		constructor() {
-		    this.themeToggle = document.getElementById('themeToggle');
-		    this.currentTheme = localStorage.getItem('theme') || 'dark';
-		    this.init();
-		}
-	
-		init() {
-		    document.documentElement.setAttribute('data-theme', this.currentTheme);
-		    this.themeToggle.addEventListener('click', () => this.toggleTheme());
-		}
-	
-		toggleTheme() {
-		    this.currentTheme = this.currentTheme === 'dark' ? 'high-contrast' : 'dark';
-		    document.documentElement.setAttribute('data-theme', this.currentTheme);
-		    localStorage.setItem('theme', this.currentTheme);
-		}
-	    }
-	
-	    class ScrollManager {
-		constructor() {
-		    this.sections = document.querySelectorAll('section');
-		    this.navLinks = document.querySelectorAll('.nav-link');
-		    this.init();
-		}
-	
-		init() {
-		    window.addEventListener('scroll', () => this.handleScroll());
-		    this.navLinks.forEach(link => {
-			link.addEventListener('click', (e) => {
-			    e.preventDefault();
-			    this.scrollToSection(link.hash);
+			// 增强点击反馈
+			document.querySelectorAll('.contact-card').forEach(card => {
+				card.addEventListener('click', function() {
+					this.style.transform = 'scale(0.98)';
+					setTimeout(() => {
+						this.style.transform = '';
+					}, 100);
+					copyToClipboard(this.dataset.copy);
+				});
 			});
-		    });
-		}
+			
+			document.querySelectorAll('.contact-card').forEach(card => {
+						card.addEventListener('click', () => {
+							const copyText = card.dataset.copy;
+							copyToClipboard(copyText);
+						});
+					});
 	
-		handleScroll() {
-		    this.sections.forEach(section => {
-			const rect = section.getBoundingClientRect();
-			if (rect.top < window.innerHeight/2 && rect.bottom > window.innerHeight/2) {
-			    section.classList.add('visible');
-			}
-		    });
-		}
-	
-		scrollToSection(id) {
-		    const target = document.querySelector(id);
-		    if (target) {
-			window.scrollTo({
-			    top: target.offsetTop,
-			    behavior: 'smooth'
-			});
-		    }
-		}
-	    }
-	
-	    document.addEventListener('DOMContentLoaded', () => {
-		new MatrixBackground(document.getElementById('matrixCanvas'));
-		new MatrixBackground(document.getElementById('aboutMatrix'));
-		new ThemeManager();
-		new ScrollManager();
-		document.querySelector('.toggle-btn').addEventListener('click', () => {
-		    document.querySelector('.panel-wrapper').classList.toggle('flipped');
-		});
-	
-		document.querySelectorAll('.tech-item').forEach(item => {
-		    item.addEventListener('mouseenter', () => {
-			item.style.transform = 'scale(1.05)';
-		    });
-		    item.addEventListener('mouseleave', () => {
-			item.style.transform = 'scale(1)';
-		    });
-		});
-	    });
-	</script>
-	</body>
-</html>
+
+            document.addEventListener('DOMContentLoaded', () => {
+                new MatrixBackground(document.getElementById('matrixCanvas'));
+                new MatrixBackground(document.getElementById('aboutMatrix'));
+                new ThemeManager();
+                new ScrollManager();
+                document.querySelector('.toggle-btn').addEventListener('click', () => {
+                    document.querySelector('.panel-wrapper').classList.toggle('flipped');
+                });
+    
+                document.querySelectorAll('.tech-item').forEach(item => {
+                    item.addEventListener('mouseenter', () => {
+                        item.style.transform = 'scale(1.05)';
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        item.style.transform = 'scale(1)';
+                    });
+                });
+            });
+        </script>
+    </body>
+    </html>
