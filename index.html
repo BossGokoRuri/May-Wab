@@ -677,6 +677,59 @@
 			--color-secondary: #444;
 			--nav-bg: rgba(255, 255, 255, 0.95);
 		}
+		
+		@media (max-width: 768px) {
+		            .panel {
+		                height: auto;
+		                min-height: 400px;
+		                overflow-y: auto;
+		}
+
+		.tech-item {
+			margin: 10px;
+			padding: 8px 16px;
+			font-size: 0.9rem;
+		}
+
+		.panel-front {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+		}
+
+		.panel-back {
+			grid-template-columns: 1fr;
+		}
+
+		.panel h3 {
+			grid-column: 1 / -1;
+			font-size: 1.2rem;
+			margin-bottom: 15px;
+		}
+
+		.panel-wrapper {
+			height: auto;
+			perspective: none;
+		}
+
+		.toggle-btn {
+			bottom: -40px;
+			padding: 10px 20px;
+			font-size: 1rem;
+		}
+	}
+
+	/* 超小屏幕适配 */
+	@media (max-width: 480px) {
+		.panel-front {
+			grid-template-columns: 1fr;
+		}
+		
+		.tech-item {
+			margin: 8px;
+			padding: 6px 12px;
+		}
+	}
 
     </style>
 </head>
@@ -747,6 +800,7 @@
                             <div class="tech-item">游戏</div>
                             <div class="tech-item">钓鱼</div>
                             <div class="tech-item">徒步</div>
+							<div class="tech-item">摩托车</div>
                         </div>
                     </div>
                     <button class="toggle-btn">Toggle View</button>
@@ -803,7 +857,7 @@
                             <div class="contact-text">pm2511@icloud.com</div>
                         </div>
                         
-                        <div class="contact-card" data-copy="+86 123-1234-5678">
+                        <div class="contact-card" data-copy="+86 138-1234-5678">
                             <svg class="contact-icon" viewBox="0 0 24 24">
                                 <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
                             </svg>
