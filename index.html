@@ -702,11 +702,6 @@
 			font-size: 1rem;
 		}
 	}
-
-	@media (max-width: 480px) {
-		.panel-front {
-			grid-template-columns: 1fr;
-		}
 		
 		.tech-item {
 			margin: 8px;
@@ -831,6 +826,32 @@
 	@media (max-width: 1200px) {
 	    .toggle-btn {
 	        bottom: -42px;
+	    }
+	}
+	
+	@media (max-width: 768px) {
+	    .panel-front {
+	        display: grid !important;
+	        grid-template-columns: repeat(2, 1fr);
+	        gap: 10px;
+	    }
+	    
+	    .tech-item {
+	        width: 100%;
+	        margin: 5px 0;
+	        padding: 10px 15px;
+	        text-align: center;
+	    }
+	}
+	
+	@media (max-width: 480px) {
+	    .panel-front {
+	        grid-template-columns: repeat(2, 1fr);
+	    }
+	    
+	    .tech-item {
+	        font-size: 0.8rem;
+	        padding: 8px 12px;
 	    }
 	}
 	
