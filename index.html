@@ -774,7 +774,7 @@
 	
 	.section-container {
 	    padding: 0 30px;
-	    position: relative;  /* 新增层级关系 */
+	    position: relative;
 	}
 	
 	@media (max-width: 768px) {
@@ -852,6 +852,32 @@
 	    .tech-item {
 	        font-size: 0.8rem;
 	        padding: 8px 12px;
+	    }
+	}
+	
+	@media (max-width: 768px) {
+	    .toggle-btn {
+	        position: relative;
+	        bottom: auto;
+	        left: auto;
+	        transform: none;
+	        margin: 30px auto 0;
+	        width: 80%;
+	        max-width: 200px;
+	        display: block;
+	    }
+	}
+	
+	@media (min-width: 769px) {
+	    .toggle-btn {
+	        bottom: 30px;
+	        transform: translateX(-50%) scale(1);
+	        transition: all 0.3s ease;
+	    }
+	    
+	    .toggle-btn:hover {
+	        transform: translateX(-50%) scale(1.1);
+	        bottom: 35px;
 	    }
 	}
 	
