@@ -549,6 +549,24 @@
 			}
 		}
 
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+
+		:root {
+			--color-primary: #ffffff;
+			--color-bg: #0a0a0a;
+			--color-accent: #4dff4d;
+			--color-secondary: #666;
+			--nav-bg: rgba(10, 10, 10, 0.95);
+			--section-width: 1200px;
+			--hero-scale: 1.1;
+		}
+
 		[data-theme="high-contrast"] {
 			--color-primary: #000000;
 			--color-bg: #ffffff;
@@ -616,6 +634,24 @@
 			font-family: 'Arial', sans-serif;
 			overflow-x: hidden;
 			scroll-behavior: smooth;
+		}
+		
+		* {
+					margin: 0;
+					padding: 0;
+					box-sizing: border-box;
+					-webkit-font-smoothing: antialiased;
+					-moz-osx-font-smoothing: grayscale;
+		}
+
+		:root {
+			--color-primary: #ffffff;
+			--color-bg: #0a0a0a;
+			--color-accent: #4dff4d;
+			--color-secondary: #666;
+			--nav-bg: rgba(10, 10, 10, 0.95);
+			--section-width: 1200px;
+			--hero-scale: 1.1;
 		}
 
 		[data-theme="high-contrast"] {
@@ -738,7 +774,7 @@
 	
 	.section-container {
 	    padding: 0 30px;
-	    position: relative;
+	    position: relative;  /* 新增层级关系 */
 	}
 	
 	@media (max-width: 768px) {
@@ -818,20 +854,7 @@
 	        padding: 8px 12px;
 	    }
 	}
-	
-	@media (max-width: 768px) {
-	    .toggle-btn {
-	        position: relative;
-	        bottom: auto;
-	        left: auto;
-	        transform: none;
-	        margin: 30px auto 0;
-	        width: 80%;
-	        max-width: 200px;
-	        display: block;
-	    }
-	}
-	
+
 	@media (min-width: 769px) {
 	    .toggle-btn {
 	        bottom: 30px;
@@ -844,35 +867,7 @@
 	        bottom: 35px;
 	    }
 	}
-	
-	@media (max-width: 768px) {
-	    .content-side {
-	        flex-direction: column;
-	        padding-bottom: 80px;
-	        position: relative;
-	    }
-	
-	    .toggle-btn {
-	        position: static;
-	        transform: none;
-	        width: 80%;
-	        max-width: 300px;
-	        margin: 30px auto 0;
-	        order: 2;
-	        bottom: auto;
-	        left: auto;
-	    }
-	
-	    .panel-wrapper {
-	        order: 1;
-	    }
-	
-	    .content-side > *:nth-child(2) {
-	        position: static !important;
-	    }
-	}
 
-	
     </style>
 </head>
 <body>
