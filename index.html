@@ -845,6 +845,34 @@
 	    }
 	}
 	
+	@media (max-width: 768px) {
+	    .content-side {
+	        flex-direction: column;
+	        padding-bottom: 80px;
+	        position: relative;
+	    }
+	
+	    .toggle-btn {
+	        position: static;
+	        transform: none;
+	        width: 80%;
+	        max-width: 300px;
+	        margin: 30px auto 0;
+	        order: 2;
+	        bottom: auto;
+	        left: auto;
+	    }
+	
+	    .panel-wrapper {
+	        order: 1;
+	    }
+	
+	    .content-side > *:nth-child(2) {
+	        position: static !important;
+	    }
+	}
+
+	
     </style>
 </head>
 <body>
